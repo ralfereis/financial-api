@@ -97,4 +97,16 @@ app.post('/withdraw', verifyExistsAccountCPF, (request, response) => {
   return response.status(201).send();
 });
 
+app.get('/statement/date', verifyExistsAccountCPF, (request, response) => {
+  const { date } = request.query;
+  const { customer } = request;
+
+  const dateFormat = new Date(date + ' 00:00');
+
+  const statement = customer.statement.filter((statement) =>
+    statement.created_at.toDateString() === new Date(dateFormat).toDateString());
+
+  return response.json(statement);
+});
+
 app.listen(3333);
