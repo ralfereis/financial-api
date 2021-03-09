@@ -1,3 +1,4 @@
+const { request, response } = require('express');
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 
@@ -29,7 +30,6 @@ function getBalance(statement) {
 
   return balance;
 }
-
 
 app.post('/account', (request, response) => {
   
@@ -108,5 +108,20 @@ app.get('/statement/date', verifyExistsAccountCPF, (request, response) => {
 
   return response.json(statement);
 });
+
+app.put('/account', verifyExistsAccountCPF, (request, response) => {
+  const { name } = request.body;
+  const { customer } = request;
+
+  customer.name = name;
+
+  return response.status(201).send();
+});
+
+app.get('/account', verifyExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  return response.json(customer);
+})
 
 app.listen(3333);
